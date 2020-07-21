@@ -1,12 +1,12 @@
-#**Satillite Labeling Project**  
+# **Satillite Labeling Project**  
 creating a tool to label satillite images similar to labelme yet focused on more than just the rgb bands  
   
   
-##running the flask app and accessing it  
+## running the flask app and accessing it  
 * python app.py  
 * then go to ***localhost*** in browser (firefox works best but all are good)  
   
-##getting the stuff to azure  
+## getting the stuff to azure  
 * docker new container added   
 * docker pull satlabeling.azurecr.io/zlorch/satlabeling  
 * ***do the shit*** 
