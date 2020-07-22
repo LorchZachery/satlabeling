@@ -20,7 +20,7 @@ class image_render:
             self.data = ds.ReadAsArray()
         else:
             self.data = self.tiff_read(fname,0, 1000, 0, 1000)
-        
+            
         print(self.data.shape)
     
     def tiff_read(self,fname: str, x1: int, x2: int, y1: int, y2: int, bands: list=[]) -> np.ndarray:

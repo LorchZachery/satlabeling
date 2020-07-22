@@ -17,3 +17,6 @@ creating a tool to label satillite images similar to labelme yet focused on more
 * az acr login -n satlabeling  
 * docker push satlabeling.azurecr.io/zlorch/satlabeling:<version>  
 	
+## .tif image  
+uploading a .tif on github is dumb, download your own from the storage container  
+name it test.tif and have it in the static/uploads folder
