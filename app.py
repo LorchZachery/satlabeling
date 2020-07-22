@@ -24,6 +24,8 @@ def upload_form():
     return render_template('image.html')
 
 
+
+
 @app.route('/', methods=['POST'])
 def display_band():
     # getting bnad value from form
@@ -36,23 +38,25 @@ def display_band():
     
     # if not rgb show the band requested`
     if rgb == 0:
-        if band < 0:
-            flash('No valied band selected')
-            return redirect(request.url)
-        else:
-            # naming the file and checking to make sure it has not already 
-            # been created
-            filename = fname + '_' + str_band + '.jpg'
-            filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        # naming the file and checking to make sure it has not already 
+        # been created
+        filename = fname + '_' + str_band + '.jpg'
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
        
-            if not os.path.exists(filename): 
-                # run render_image class
-                # run render_image class
-                name = fname + '.tif'
-                name = os.path.join(app.config['UPLOAD_FOLDER'], name)
-                image = image_render(name,False)
-                rend_image = image.band(band)
+        if not os.path.exists(filename): 
+            # run render_image class
+            # run render_image class
+            name = fname + '.tif'
+            name = os.path.join(app.config['UPLOAD_FOLDER'], name)
+            image = image_render(name,False)
+            rend_image = image.band(band)
             
+            # error handling if band outside of range
+            if rend_image is False:
+                flash("Band outside of range")
+                return redirect(request.url)
+            else:
                 #turn array into image
                 complete_image = Image.fromarray(rend_image)
             

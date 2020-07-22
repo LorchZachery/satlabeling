@@ -25,7 +25,7 @@ class image_render:
             self.data = self.tiff_read(fname,0, 1000, 0, 1000)
             
         print(self.data.shape)
-    
+        
     def tiff_read(self,fname: str, x1: int, x2: int, y1: int, y2: int, bands: list=[]) -> np.ndarray:
         """
         Reads a sub-section of the tiff array.  This call 
@@ -97,5 +97,10 @@ class image_render:
         return img
         
     def band(self, band_num):
-        self.img = self.contrast_enhance_band(self.data[band_num,:,:], percentile=(0.5,99.5),gamma=0.7)
-        return self.img
+        if (band_num < self.data.shape[0]) and (band_num > 0):
+            self.img = self.contrast_enhance_band(self.data[band_num,:,:], percentile=(0.5,99.5),gamma=0.7)
+            return self.img
+        else: 
+            # raise Exception("Band Selection is outside of range")
+            return False
+            
