@@ -14,11 +14,14 @@ class image_render:
     
     def __init__(self, fname, normal_size=True):
         print(gdal.__version__)
+        # opens the whole file
         if normal_size:
             # opening .tif file up to read it and extract bands
             ds = gdal.Open(fname)
             self.data = ds.ReadAsArray()
+        # opens a section of the file
         else:
+            # TODO: have each section of the file open up for viewing
             self.data = self.tiff_read(fname,0, 1000, 0, 1000)
             
         print(self.data.shape)
@@ -59,6 +62,9 @@ class image_render:
 
 
     def show(self,cmap='viridis'):
+        """
+            Shows the image with pil for debuging
+        """
         plt.figure(figsize=(10,10))
         plt.imshow(self.img,cmap=cmap)
         plt.show()

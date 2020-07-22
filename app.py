@@ -12,7 +12,6 @@ UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 fname = "static/uploads/test.tif"
 
-
 app = Flask(__name__)
 app.secret_key = "secret key"
 
@@ -24,45 +23,53 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 def upload_form():
     return render_template('image.html')
 
+
 @app.route('/', methods=['POST'])
 def display_band():
-   
+    # getting bnad value from form
     str_band = request.form['band']
     if str_band != '': band = int(str_band)
     
+    # checking if rgb is requested
     str_rgb = request.form['rgb']
     if str_rgb != '': rgb = int(str_rgb)
     
+    # if not rgb show the band requested`
     if rgb == 0:
-        
         if band < 0:
             flash('No valied band selected')
             return redirect(request.url)
         else:
             # run render_image class
-            image = image_render(fname,True)
+            image = image_render(fname,False)
             rend_image = image.band(band)
-            im = Image.fromarray(rend_image)
             
-            #image.show()
-            #print('upload_image filename: ' + filename)
+            #turn array into image
+            complete_image = Image.fromarray(rend_image)
             
+            
+    # if rgb is requested       
     else:
+        # giving the file a name for later
         str_band = '321'
         band = 321
-        image = image_render(fname,True)
+        
+        # run render_image class
+        image = image_render(fname,False)
         rend_image = image.s2_to_rgb()
-        im = Image.fromarray(rend_image)
-    
+        
+        # turn array into image
+        complete_image = Image.fromarray(rend_image)
+   
+    # saving file as band number (321 for rgb) in the UPLOAD_FOLDER
     filename = os.path.join(app.config['UPLOAD_FOLDER'], str_band)
-    im.save(filename + '.jpg')
+    complete_image.save(filename + '.jpg')
        
     return render_template('image.html', band=band)
         
 @app.route('/image/<band>')
 def display_image(band):
-	#print('display_image filename: ' + filename)
-    print("here5")
+	# getting where the image is saved to display it    
     return redirect(url_for('static', filename='uploads/' + band + '.jpg'), code=301)
 
 if __name__ == "__main__":

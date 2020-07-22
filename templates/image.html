@@ -18,12 +18,13 @@
 </p>
 {% if band %}
 	<div>
-		<img src="{{ url_for('display_image', band=band) }}", height="300", width="400">
+		<img src="{{ url_for('display_image', band=band) }}", height="600", width="600">
 	</div>
 {% endif %}
 <form method="post" action="/" enctype="multipart/form-data">
 	<dl>
 		<p>
+			<label for="band">Band Number</label>
 			<input type="number" name="band" id="band">
 		</p>
 	</dl>
