@@ -18,14 +18,17 @@ app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-
+"""
+uploads the basic form before an image is selected
+"""
 @app.route('/')
 def upload_form():
     return render_template('image.html')
 
-
-
-
+"""
+when the form is submitted requesting an image
+this function is called and render and saves the band requested
+"""
 @app.route('/', methods=['POST'])
 def display_band():
     # getting bnad value from form
@@ -87,7 +90,11 @@ def display_band():
         complete_image.save(filename)
        
     return render_template('image.html', band=band)
-        
+    
+
+"""
+access to the image where it is saved in order to display it
+"""    
 @app.route('/image/<band>')
 def display_image(band):
 	# getting where the image is saved to display it    

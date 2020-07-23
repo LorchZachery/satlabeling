@@ -13,7 +13,7 @@ class image_render:
     """
     
     def __init__(self, fname, normal_size=True):
-        print(gdal.__version__)
+        # print(gdal.__version__)
         # opens the whole file
         if normal_size:
             # opening .tif file up to read it and extract bands
