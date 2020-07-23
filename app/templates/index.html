@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<p>
+	
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		
+		{% for message in messages %}
+		  <p>{{ message }}</p>
+		{% endfor %}
+		
+	  {% endif %}
+	{% endwith %}
+</p>
+{% if filename %}
+	<div>
+		<img src="{{ url_for('display_image', filename=filename) }}", height="600", width="600">
+	</div>
+{% endif %}
+
+
+
+	<form action="" method="post" novalidate>
+		{{ form.hidden_tag() }}
+		<p>
+			{{ form.band_num.label }} <br>
+			{{ form.band_num() }}
+		</p>
+		<p>
+			{{ form.rgb.label }} {{ form.rgb() }}
+		</p>
+		<p>{{ form.submit() }}</p>
+	</form>
+{% endblock %}
+</body>
+</html>

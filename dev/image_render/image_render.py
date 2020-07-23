@@ -14,17 +14,20 @@ class image_render:
     """
     
     def __init__(self, fname, normal_size=True):
-        print(gdal.__version__)
+        # print(gdal.__version__)
+        # opens the whole file
         if normal_size:
             # opening .tif file up to read it and extract bands
             ds = gdal.Open(fname)
             self.data = ds.ReadAsArray()
+        # opens a section of the file
         else:
+            # TODO: have each section of the file open up for viewing
             self.data = self.tiff_read(fname,0, 1000, 0, 1000)
             
         print(self.data.shape)
-    
-    def tiff_read(self,fname: str, x1: int, x2: int, y1: int, y2: int, bands: list=[]) -> np.ndarray:
+        
+    def tiff_read(self,fname: str, bands: list=[]) -> np.ndarray:
         """
         Reads a sub-section of the tiff array.  This call 
         > x = tiff_read(fname, i1, i2, j1, j2)
@@ -40,26 +43,38 @@ class image_render:
             raise(FileNotFoundError("<%s> exists, but failed to open" % fname))
         ny = ds.RasterXSize
         nx = ds.RasterYSize
-        if x2>nx or y2>ny or x1<0 or y1<0 or y2<y1 or x2<x1:
-            raise ValueError("Invalid subset [%d:%d, %d:%d] from [0:%d, 0:%d], <%s>"
-                            % (x1, x2, y1, y2, nx, ny, fname))
-        if len(bands)>0:
-            band = ds.GetRasterBand(1+bands[0])
-            x: np.ndarray = band.ReadAsArray(y1,x1,y2-y1,x2-x1)
-            array: np.ndarray = np.zeros((len(bands),x2-x1,y2-y1), dtype=x.dtype)
-            array[0,:,:] = x
-            for i, b in enumerate(bands):
-                if i>0:
-                    band = ds.GetRasterBand(b+1)
-                    x: np.ndarray = band.ReadAsArray(y1,x1,y2-y1,x2-x1)
-                    array[i,:,:] = x
-        else:
-            array: np.ndarray = ds.ReadAsArray(y1,x1,y2-y1,x2-x1)
+        sec_y = ny /4
+        sec_x = nx /4
+        x1,y1 = 0
+        x2 = sec_x
+        y2 = sec_y
+        images 
+        while x2 <= nx and y2 <= ny:
+            if len(bands)>0:
+                band = ds.GetRasterBand(1+bands[0])
+                x: np.ndarray = band.ReadAsArray(y1,x1,y2-y1,x2-x1)
+                array: np.ndarray = np.zeros((len(bands),x2-x1,y2-y1), dtype=x.dtype)
+                array[0,:,:] = x
+                for i, b in enumerate(bands):
+                    if i>0:
+                        band = ds.GetRasterBand(b+1)
+                        x: np.ndarray = band.ReadAsArray(y1,x1,y2-y1,x2-x1)
+                        array[i,:,:] = x
+            else:
+                array: np.ndarray = ds.ReadAsArray(y1,x1,y2-y1,x2-x1)
+            
+            x1 = x2
+            y1 = y2
+            x2 = x2 + sec_x
+            y2 = y2 + sec_y
         return array
 
 
 
     def show(self,cmap='viridis'):
+        """
+            Shows the image with pil for debuging
+        """
         plt.figure(figsize=(10,10))
         plt.imshow(self.img,cmap=cmap)
         plt.show()
@@ -89,7 +104,12 @@ class image_render:
         img[:,:,1] =  self.contrast_enhance_band(self.data[g, :, :], percentile=(0.5, 99.5), gamma=0.7)
         img[:,:,2] =  self.contrast_enhance_band(self.data[b, :, :], percentile=(0.5, 99.5), gamma=0.7)
         self.img = img
-
+        return img
+        
     def band(self, band_num):
-        self.img = self.contrast_enhance_band(self.data[band_num,:,:], percentile=(0.5,99.5),gamma=0.7)
-    
+        if (band_num < self.data.shape[0]) and (band_num > 0):
+            self.img = self.contrast_enhance_band(self.data[band_num,:,:], percentile=(0.5,99.5),gamma=0.7)
+            return self.img
+        else: 
+            # raise Exception("Band Selection is outside of range")
+            return False
