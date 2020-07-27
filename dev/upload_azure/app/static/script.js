@@ -1,0 +1,3 @@
+function nextImage(){
+	alert("hit")
+}
