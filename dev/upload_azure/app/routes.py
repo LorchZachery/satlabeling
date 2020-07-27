@@ -8,14 +8,17 @@ from werkzeug.utils import secure_filename
 from app.image_render import image_render
 from app import app
 from app.forms import BandForm
-from app.azure_connect import Azure_Connect
+from app.azure_connect import Azure_Connect, Azure_Upload
 
 azure = Azure_Connect("scihub")
 azure.get_file_info()
 Paths = azure.get_paths()
 Files = azure.get_files()
+azure_upload = Azure_Upload("imagebands/uploads")
 
-
+"""
+Displays home index page, just to get it started
+"""
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -33,7 +36,9 @@ def index():
 
 
 
-
+"""
+function to orgainize code, gets the rgb band of the imgae
+"""
 def get_rgb_info(number):
     # giving the file a name for later
     filename = Paths[number]
@@ -42,7 +47,7 @@ def get_rgb_info(number):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], name)
     complete_image = None
     # if the file has not been created, create it otherwise skip
-    if not os.path.exists(filepath): 
+    if not azure_upload.exists(name): 
         # run render_image class
         image = image_render(filename,False)
         rend_image = image.s2_to_rgb()
@@ -59,6 +64,7 @@ this function is called and render and saves the band requested
 @app.route('/<number>/', methods=['GET', 'POST'])
 def bands(number):
     print("here bands")
+    print(number)
     if number:
         number = int(number)
     form = BandForm()
@@ -74,10 +80,10 @@ def bands(number):
             if not rgb:
                 # naming the file and checking to make sure it has not already 
                 # been created
-                name = Files[number].split('/')[3].split('.')[0] + str(band)+ '.jpg'
+                name = Files[number].split('/')[3].split('.')[0] + '_' + str(band)+ '.jpg'
                 filepath = os.path.join(app.config['UPLOAD_FOLDER'],name )
                 
-                if not os.path.exists(filepath): 
+                if not azure_upload.exists(name): 
                     # run render_image class
                     # run render_image class
                     image = image_render(filename,False)
@@ -98,17 +104,19 @@ def bands(number):
                 
             # if the file had not already been created save it
             # saving file as band number (321 for rgb) in the UPLOAD_FOLDER
-            if not os.path.exists(filepath): 
+            if not azure_upload.exists(name):
                 complete_image.save(filepath)
-    
+                azure_upload.upload_file(filepath,name)
+                os.remove(filepath)
     #make rgb the default for better viewing
     else:
         str_band, filepath, name, complete_image = get_rgb_info(number)
         # if the file had not already been created save it
         # saving file as band number (321 for rgb) in the UPLOAD_FOLDER
-        if not os.path.exists(filepath): 
-            complete_image.save(filepath)
-    
+        if not azure_upload.exists(name):
+                complete_image.save(filepath)
+                azure_upload.upload_file(filepath,name)
+                os.remove(filepath)
     
     # clearing forms
     form.band_num.data = None
@@ -117,25 +125,23 @@ def bands(number):
     year = None
     date = None
     file = None
+    url = None
+    # if a number (image) is requested, give the information about the image 
+    # to the html file index.html
     if number or number==0:
         info = Files[number].split('/')
         utm = info[0]
         year = info[1]
         date = info[2]
         file = info[3]
-    
-    return render_template('index.html', title=str_band, form=form,name=name, number=number, utm=utm, year=year, date=date, file=file )
+        url = azure_upload.get_img_url_with_blob_sas_token(name)
+    print(url)
+    return render_template('index.html', title=str_band, form=form,name=name, number=number, utm=utm, year=year, date=date, file=file, url=url )
     
 
 """
-access to the image where it is saved in order to display it
-"""    
-@app.route('/images/<name>')
-def display_image(name):
-    print("here display")
-	# getting where the image is saved to display it    
-    return redirect(url_for('static', filename='uploads/' + name ), code=301)
-
+navigation to next and prev images
+"""
 @app.route('/<command>/<number>')
 def nav_image(command, number):
     number = int(number)

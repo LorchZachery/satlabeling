@@ -35,8 +35,7 @@ class image_render:
         > x = x[i1:i2, j1:j2, ...]
         except of course that the first call is much faster and more memory efficient.
         """
-        if not os.path.exists(fname):
-            raise(FileNotFoundError("<%s> doesn't exist" % fname))
+        
         ds = gdal.Open(fname)
         if ds is None:
             raise(FileNotFoundError("<%s> exists, but failed to open" % fname))
