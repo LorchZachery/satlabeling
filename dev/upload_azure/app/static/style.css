@@ -1,0 +1,8 @@
+#button_prev, #button_next{
+	display:inline-block;
+}
+
+.container_child {
+    width: 50%;
+    float: left;
+}  
