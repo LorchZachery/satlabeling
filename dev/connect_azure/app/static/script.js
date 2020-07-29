@@ -1,3 +1,0 @@
-function nextImage(){
-	alert("hit")
-}

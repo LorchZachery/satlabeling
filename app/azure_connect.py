@@ -85,7 +85,7 @@ class Azure_Upload:
         self.container_client = self.blob_service_client.get_container_client(self.container_name)
         self.account_name = "satlabelingdata"
         self.account_key = os.getenv('AZURE_SATLABELING_ACCOUNT_KEY')
-        self.container_name = "imagebands/uploads"
+        
     def upload_file(self,path,name):
         self.blob_client = self.blob_service_client.get_blob_client(container=self.container_name, blob=name)
         #print(self.blob_client.get_blob_properties())

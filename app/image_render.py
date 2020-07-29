@@ -1,9 +1,10 @@
 import os
 from osgeo import gdal
+from osgeo import gdalconst
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import exposure
-
+from app.azure_connect import Azure_Upload
 
 class image_render:
     """
@@ -23,7 +24,7 @@ class image_render:
         else:
             # TODO: have each section of the file open up for viewing
             self.data = self.tiff_read(fname,0, 1000, 0, 1000)
-            
+            self.write_tiff(fname,0, 1000, 0, 1000)
         print(self.data.shape)
         
     def tiff_read(self,fname: str, x1: int, x2: int, y1: int, y2: int, bands: list=[]) -> np.ndarray:
@@ -59,7 +60,81 @@ class image_render:
         return array
 
 
-
+    
+    def write_tiff(self, ref_file,  x1: int, x2: int, y1: int, y2: int):
+        """
+        obj.write_tiff('/mnt/sar-vision-data/space-eye/predictions/quincy', format_str='fake_s2_%s.tif', predictions=True)
+        will write to files name
+        
+        """
+        type_info = { np.dtype(np.float32): (3, gdalconst.GDT_Float32),
+                    np.dtype(np.float64): (3, gdalconst.GDT_Float64),
+                    np.dtype(np.int16): (2, gdalconst.GDT_Int16),
+                    np.dtype(np.int32): (2, gdalconst.GDT_Int32),
+                    np.dtype(np.uint16): (2, gdalconst.GDT_UInt16),
+                    np.dtype(np.uint32): (2, gdalconst.GDT_UInt32),
+                    np.dtype(np.uint8): (1, gdalconst.GDT_Byte),
+                    np.dtype(np.bool): (1, gdalconst.GDT_Byte) }
+        
+        if self.data.dtype in type_info:
+            predictor, gdal_type = type_info[self.data.dtype]
+        else:
+            raise ValueError("Arrays of type %s are not supported." % self.data.dtype)
+    
+        nbands, nx, ny = self.data.shape
+        
+    
+        gtiff_flags = [ 'COMPRESS=ZSTD', # also LZW and DEFLATE works well
+                        'ZSTD_LEVEL=9', # should be between 1-22, and 22 is highest compression.
+                                        # 9 is default and gets essentially the same compression-rate
+                    'PREDICTOR=%d' % predictor, # default is 1, use 2 for ints, and 3 for floats
+                    'TILED=YES' # so that we can read sub-arrays efficiently
+                    ]
+        
+        
+        ds = gdal.Open(ref_file)
+        
+        assert(ds is not None)
+        # calculate the new geotransform
+        geotransform = ds.GetGeoTransform()
+        proj = ds.GetProjection()
+        
+        assert(proj is not None)
+        orig_x, dx_x, dx_y, orig_y, dy_x, dy_y = geotransform
+        assert(dx_y==0 and dy_x==0)
+        x = min(x1, x2)
+        y = min(y1, y2)
+        orig_x += dx_x * x
+        orig_y += dy_y * y
+        new_geotransform = (orig_x, dx_x, dx_y, orig_y, dy_x, dy_y)
+    
+        
+        dir_name = "app/static/uploads"
+        name = ref_file.split('/')[6].split('.')[0] + '_sectioned.tif'
+        tiff_file = os.path.join(dir_name, name)
+        
+        print(tiff_file)
+        outDrv = gdal.GetDriverByName('GTiff')
+        out = outDrv.Create(tiff_file, ny, nx, nbands, gdal_type,  gtiff_flags )
+        out.SetProjection(proj)
+        out.SetGeoTransform(new_geotransform)
+        for i in range(nbands):
+            tmp = self.data[i,:,:]
+            out.GetRasterBand(i+1).WriteArray(tmp)
+        out.FlushCache()
+        del out
+        del ds
+        azure_upload = Azure_Upload("imagebands/section_tiffs")
+        azure_upload.upload_file(tiff_file, name)
+        os.remove(tiff_file)
+    
+    
+    
+    
+    
+    
+    
+    
     def show(self,cmap='viridis'):
         """
             Shows the image with pil for debuging
@@ -85,7 +160,7 @@ class image_render:
         # convert to 0-255 range
         self.img = np.transpose((255. * tmp), (1,2,0)).astype(np.uint8)
     
-    def s2_to_rgb(self,rgb=[2,1,0]):
+    def s2_to_rgb(self,rgb=[3,2,1]):
         r, g, b = rgb
         nb, nx, ny = self.data.shape
         img = np.zeros((nx, ny, 3), dtype = np.uint8)
@@ -104,4 +179,3 @@ class image_render:
         else: 
             # raise Exception("Band Selection is outside of range")
             return False
-            
