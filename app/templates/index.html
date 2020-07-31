@@ -44,6 +44,14 @@
 	<p>
 		{{ form.rgb.label }} {{ form.rgb() }} Default is RGB
 	</p>
+	<p>
+		<input type="radio", id="clouds", name="label", value="clouds" checked>
+		<label for="clouds">Clouds</label><br>
+		<input type="radio", id="semi-clouds", name="label", value="semi-clouds">
+		<label for="semi-clouds">Semi-Clouds</label><br>
+		<input type="radio", id="no-clouds", name="label", value="no-clouds">
+		<label for="no-clouds">No Clouds</label><br>
+	</p>
 	{% endif %}
 	<p>{{ form.submit() }}</p>
 	

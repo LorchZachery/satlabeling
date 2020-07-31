@@ -9,13 +9,15 @@ from app.image_render import image_render
 from app import app
 from app.forms import BandForm
 from app.azure_connect import Azure_Connect, Azure_Upload
+from app.database import Database
+
 
 azure = Azure_Connect("scihub")
 azure.get_file_info()
 Paths = azure.get_paths()
 Files = azure.get_files()
 azure_upload = Azure_Upload("imagebands/uploads")
-
+database = Database()
 """
 Displays home index page, just to get it started
 """
@@ -72,6 +74,7 @@ def bands(number):
     name = None
     filename = Paths[number]
     if form.validate_on_submit():
+        
         rgb = form.rgb.data
         band = form.band_num.data
         if rgb or band is not None:
@@ -109,7 +112,7 @@ def bands(number):
                 azure_upload.upload_file(filepath,name)
                 os.remove(filepath)
     #make rgb the default for better viewing
-    else:
+    if name is None:
         str_band, filepath, name, complete_image = get_rgb_info(number)
         # if the file had not already been created save it
         # saving file as band number (321 for rgb) in the UPLOAD_FOLDER
@@ -118,6 +121,14 @@ def bands(number):
                 azure_upload.upload_file(filepath,name)
                 os.remove(filepath)
     
+    # sending to database the label
+
+    default_name = '0'
+    label = request.form.get('label',default_name)
+    if label!='0':
+        id = Files[number].split('/')[3].split('.')[0] + '_sectioned.tif'
+        database.add_data(id, 1, label)
+   
     # clearing forms
     form.band_num.data = None
     form.rgb.data = False
@@ -128,7 +139,7 @@ def bands(number):
     url = None
     # if a number (image) is requested, give the information about the image 
     # to the html file index.html
-    if number or number==0:
+    if (number or number==0) and (name is not None):
         info = Files[number].split('/')
         utm = info[0]
         year = info[1]

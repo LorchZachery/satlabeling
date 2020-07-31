@@ -11,8 +11,8 @@ creating a tool to label satillite images similar to labelme yet focused on more
 * docker pull satlabeling.azurecr.io/zlorch/satlabeling  
 * ***do the shit*** 
 * docker build -t satlabeling:<version> .  
-* docker run -p 80:80 -d satlabeling:<version>  
-* docker tag satlabeling:tag satlabeling.azurecr.io/zlorch/satlabeling:<version>  
+* docker run --env-file ./env.list -d -p 80:80 satlabeling:<version> 
+* docker tag satlabeling:tag satlabeling.azurecr.io/zlorch/sat_labeling:<version>  
 * az login  
 * az acr login -n satlabeling  
-* docker push satlabeling.azurecr.io/zlorch/satlabeling:<version>  
+* docker push satlabeling.azurecr.io/zlorch/sat_labeling:<version>  
