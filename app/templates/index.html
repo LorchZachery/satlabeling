@@ -14,13 +14,13 @@
 	{% endwith %}
 </p>
 
-	<div>
-		<div class="container_child">
+	
+		<div class="container_left">
 		{% if url %}
 			<img src="{{ url }}", height="600", width="600">
 		{% endif %}
 		</div>
-
+<div class="container_right">
 {% if number or number == 0 %}
 		<div>
 			<ul>
@@ -30,10 +30,10 @@
 				<li>File: {{ file }}</li>
 			</ul>
 		</div>
-	</div>
+	
 {% endif %}
 
-<div class="container_child">
+
 <form action="" method="post" novalidate id="bandForm">
 	{{ form.hidden_tag() }}
 	{% if number or number == 0 %}

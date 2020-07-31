@@ -24,7 +24,7 @@ Displays home index page, just to get it started
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    print("here inex")
+    
     form = BandForm()
     str_band = "Select band"
     name = None
@@ -65,8 +65,7 @@ this function is called and render and saves the band requested
 @app.route('/<number>', methods=['GET', 'POST'])
 @app.route('/<number>/', methods=['GET', 'POST'])
 def bands(number):
-    print("here bands")
-    print(number)
+    
     if number:
         number = int(number)
     form = BandForm()
@@ -146,7 +145,7 @@ def bands(number):
         date = info[2]
         file = info[3]
         url = azure_upload.get_img_url_with_blob_sas_token(name)
-    print(url)
+    
     return render_template('index.html', title=str_band, form=form,name=name, number=number, utm=utm, year=year, date=date, file=file, url=url )
     
 

@@ -25,7 +25,7 @@ class image_render:
             # TODO: have each section of the file open up for viewing
             self.data = self.tiff_read(fname,0, 1000, 0, 1000)
             self.write_tiff(fname,0, 1000, 0, 1000)
-        print(self.data.shape)
+        
         
     def tiff_read(self,fname: str, x1: int, x2: int, y1: int, y2: int, bands: list=[]) -> np.ndarray:
         """
@@ -113,7 +113,7 @@ class image_render:
         name = ref_file.split('/')[6].split('.')[0] + '_sectioned.tif'
         tiff_file = os.path.join(dir_name, name)
         
-        print(tiff_file)
+        
         outDrv = gdal.GetDriverByName('GTiff')
         out = outDrv.Create(tiff_file, ny, nx, nbands, gdal_type,  gtiff_flags )
         out.SetProjection(proj)
