@@ -66,7 +66,7 @@ this function is called and render and saves the band requested
 @app.route('/<number>/', methods=['GET', 'POST'])
 def bands(number):
     #converting the number into an int
-    if number:
+    if number is not None:
         number = int(number)
     
     
@@ -83,9 +83,10 @@ def bands(number):
     filename = Paths[number]
     if form.submit1.data and form.validate():
         
-        rgb = form.rgb.data
-        band = form.band_num.data
+        rgb = request.form.get('rgb',None)
+        band = request.form.get('band_num',None)
         if rgb or band is not None:
+            band = int(band)
             str_band = 'Band' + str(band)
             # if not rgb show the band requested
             if not rgb:

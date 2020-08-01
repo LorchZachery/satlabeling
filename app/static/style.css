@@ -4,8 +4,9 @@
 
 
 .container_left {
-    width: 50%;
-    float: left;
+	display:inline-block;
+	height: 600px;
+	width: 600px;
 }  
 .container_right{
 	width: 50%;

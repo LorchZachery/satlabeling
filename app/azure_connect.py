@@ -92,7 +92,7 @@ class Azure_Upload:
         self.blob_client = self.blob_service_client.get_blob_client(container=self.container_name, blob=name)
         #print(self.blob_client.get_blob_properties())
         if not self.exists(name):
-            print("\nUploadind Blob")
+            print("\nUploading Blob")
             
             with open(path, "rb") as data:
                 self.blob_client.upload_blob(data)

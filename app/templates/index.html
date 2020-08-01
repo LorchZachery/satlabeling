@@ -39,16 +39,16 @@
 
 <form action="" method="post" novalidate id="bandForm">
 	{{ form.hidden_tag() }}
-	{% if number or number == 0 %}
+	
 	<p>
-		{{ form.band_num.label }} <br>
-		{{ form.band_num() }}
+		<label for="band_num">Band Number</label> <br>
+		<input type="number", id="band_num", name="band_num", min="0">
 	</p>
 	<p>
-		{{ form.rgb.label }} {{ form.rgb() }} Default is RGB
+		<label for ="rgb">RGB</label><input type="checkbox", id="rgb", name="rgb">
 	</p>
 	
-	{% endif %}
+	
 	<p>{{ form.submit1() }}</p>
 	
 	
