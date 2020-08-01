@@ -49,7 +49,7 @@
 	</p>
 	
 	{% endif %}
-	<p>{{ form.submit() }}</p>
+	<p>{{ form.submit1() }}</p>
 	
 	
 </form>
@@ -64,7 +64,7 @@
 		<label for="no-clouds">No Clouds</label><br>
 	</p>
 	
-	{{ nextForm.submit() }}
+	{{ nextForm.submit2() }}
 	<a href="{{ url_for('nav_image',command='prev', number=number, label='None') }}", id="button_prev"><input type="button" value="Previous"></a>
 	
 </form>

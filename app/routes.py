@@ -72,7 +72,7 @@ def bands(number):
     
     #to submit the selected label on next
     nextForm = NextForm()
-    if nextForm.validate_on_submit():
+    if nextForm.submit2.data and nextForm.validate():
         label = request.form.get('label','None')
         return redirect(url_for('nav_image', command='next',number=number, label=label), code=302)
     
@@ -81,7 +81,7 @@ def bands(number):
     str_band = "Select band"
     name = None
     filename = Paths[number]
-    if form.validate_on_submit():
+    if form.submit1.data and form.validate():
         
         rgb = form.rgb.data
         band = form.band_num.data
