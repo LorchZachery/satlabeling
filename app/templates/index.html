@@ -28,6 +28,9 @@
 				<li>Year: {{ year }}</li>
 				<li>Date: {{ date }}</li>
 				<li>File: {{ file }}</li>
+				{% if current_label %}
+				<li>Label: {{ current_label }}</li>
+				{% endif %}
 			</ul>
 		</div>
 	
@@ -44,21 +47,26 @@
 	<p>
 		{{ form.rgb.label }} {{ form.rgb() }} Default is RGB
 	</p>
+	
+	{% endif %}
+	<p>{{ form.submit() }}</p>
+	
+	
+</form>
+<form method="post" id="tagForm">
+	{{ nextForm.hidden_tag() }}
 	<p>
-		<input type="radio", id="clouds", name="label", value="clouds" checked>
+		<input type="radio", id="clouds", name="label", value="clouds">
 		<label for="clouds">Clouds</label><br>
 		<input type="radio", id="semi-clouds", name="label", value="semi-clouds">
 		<label for="semi-clouds">Semi-Clouds</label><br>
 		<input type="radio", id="no-clouds", name="label", value="no-clouds">
 		<label for="no-clouds">No Clouds</label><br>
 	</p>
-	{% endif %}
-	<p>{{ form.submit() }}</p>
 	
-	{% if number or number == 0 %}
-	<a href="{{ url_for('nav_image',command='next', number=number) }}", id="button_next"><input type="button" value="Next"></a>
-	<a href="{{ url_for('nav_image',command='prev', number=number) }}", id="button_prev"><input type="button" value="Previous"></a>
-	{% endif %}
+	{{ nextForm.submit() }}
+	<a href="{{ url_for('nav_image',command='prev', number=number, label='None') }}", id="button_prev"><input type="button" value="Previous"></a>
+	
 </form>
 </div>
 <script src=" {{ url_for('static', filename='script.js') }}"></script>

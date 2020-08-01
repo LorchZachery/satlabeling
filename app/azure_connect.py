@@ -35,22 +35,24 @@ class Azure_Connect:
             if blob.content_settings["content_type"] is not None:
                 
                 fname = blob.name
+                
                 list = fname.split('/')
-                exclude = ['cloud','shadow']
-                if exclude[0] not in list[3] and exclude[1] not in list[3]:
-                    self.blob_files.append(blob)
-                    
-                    if list[0] not in self.UTMs:
-                        self.UTMs.append(list[0])
-                    year = list[0] + '/' + list[1]
-                    if year not in self.Years:
-                        self.Years.append(year)
-                    date = year + '/' + list[2]
-                    if date not in self.Dates:
-                        self.Dates.append(date)
-                    file = date + '/' + list[3]
-                    if file not in self.Files:
-                        self.Files.append(file)
+                if len(list) > 1:
+                    exclude = ['cloud','shadow']
+                    if exclude[0] not in list[3] and exclude[1] not in list[3]:
+                        self.blob_files.append(blob)
+                        
+                        if list[0] not in self.UTMs:
+                            self.UTMs.append(list[0])
+                        year = list[0] + '/' + list[1]
+                        if year not in self.Years:
+                            self.Years.append(year)
+                        date = year + '/' + list[2]
+                        if date not in self.Dates:
+                            self.Dates.append(date)
+                        file = date + '/' + list[3]
+                        if file not in self.Files:
+                            self.Files.append(file)
         gdal.SetConfigOption('AZURE_STORAGE_CONNECTION_STRING', self.connect_str)
         self.Paths = []
         for blob in self.blob_files:

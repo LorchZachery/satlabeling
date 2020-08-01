@@ -56,7 +56,21 @@ class Database:
             return False
         return read_item
             
+    def check_label(self,id):
+        query = "SELECT c.label FROM c WHERE c.id = '" + id + "'"
+        items = list(self.container.query_items(
+            query=query,
+            enable_cross_partition_query=True
+        ))
+        
+        if len(items) > 0:
             
+            return items[0].get("label","error")
+        else:
+            return "No label"
+        
+        
+        
             
             
             

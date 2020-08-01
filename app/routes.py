@@ -7,7 +7,7 @@ from flask import Flask, flash, request, redirect, url_for, render_template, sen
 from werkzeug.utils import secure_filename
 from app.image_render import image_render
 from app import app
-from app.forms import BandForm
+from app.forms import BandForm, NextForm
 from app.azure_connect import Azure_Connect, Azure_Upload
 from app.database import Database
 
@@ -30,10 +30,10 @@ def index():
     name = None
     form.band_num.data = None
     form.rgb.data = False
-    if form.validate_on_submit():
-        filename=Paths[0]
-        number = "0"
-        return redirect(url_for('bands', number=number), code=302)
+    #if form.validate_on_submit():
+    filename=Paths[0]
+    number = "0"
+    return redirect(url_for('bands', number=number), code=302)
     return render_template('index.html', title=str_band, form=form, name=name, number=None)
 
 
@@ -65,9 +65,18 @@ this function is called and render and saves the band requested
 @app.route('/<number>', methods=['GET', 'POST'])
 @app.route('/<number>/', methods=['GET', 'POST'])
 def bands(number):
-    
+    #converting the number into an int
     if number:
         number = int(number)
+    
+    
+    #to submit the selected label on next
+    nextForm = NextForm()
+    if nextForm.validate_on_submit():
+        label = request.form.get('label','None')
+        return redirect(url_for('nav_image', command='next',number=number, label=label), code=302)
+    
+    #setting up varibles for band selecting form
     form = BandForm()
     str_band = "Select band"
     name = None
@@ -120,14 +129,12 @@ def bands(number):
                 azure_upload.upload_file(filepath,name)
                 os.remove(filepath)
     
-    # sending to database the label
-
-    default_name = '0'
-    label = request.form.get('label',default_name)
-    if label!='0':
-        id = Files[number].split('/')[3].split('.')[0] + '_sectioned.tif'
-        database.add_data(id, 1, label)
-   
+        
+    #getting the current label for displaying     
+    id = Files[number].split('/')[3].split('.')[0] + '_sectioned.tif'
+    current_label = database.check_label(id)
+    
+        
     # clearing forms
     form.band_num.data = None
     form.rgb.data = False
@@ -146,22 +153,29 @@ def bands(number):
         file = info[3]
         url = azure_upload.get_img_url_with_blob_sas_token(name)
     
-    return render_template('index.html', title=str_band, form=form,name=name, number=number, utm=utm, year=year, date=date, file=file, url=url )
+    return render_template('index.html', title=str_band, form=form,name=name, nextForm= nextForm, number=number, utm=utm, year=year, date=date, file=file, url=url, current_label=current_label )
     
 
 """
 navigation to next and prev images
 """
-@app.route('/<command>/<number>')
-def nav_image(command, number):
+@app.route('/<command>/<number>/<label>', methods=['GET','POST'])
+def nav_image(command, number,label):
     number = int(number)
+    
+    #if at last number in list
     if len(Paths) <= (number + 1):
         flash("last image in list")
         return redirect(url_for('bands', number=number), code=302)
     
+    #if command is next 
     if command == 'next':
+        # getting the selected label (or none) and updating the database
+        id = Files[number].split('/')[3].split('.')[0] + '_sectioned.tif'
+        if label!='None':
+            database.add_data(id, 1, label)
         return redirect(url_for('bands', number=number + 1), code=302)
-    
+    # if the command is prev
     else:
         if (number -1) < 0:
             flash("This is the first image in the list")

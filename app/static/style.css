@@ -2,9 +2,7 @@
 	display:inline-block;
 }
 
-.container_left, .container_right{
-	display:none;
-}
+
 .container_left {
     width: 50%;
     float: left;
