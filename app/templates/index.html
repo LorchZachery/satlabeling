@@ -63,9 +63,9 @@
 		<input type="radio", id="no-clouds", name="label", value="no-clouds">
 		<label for="no-clouds">No Clouds</label><br>
 	</p>
-	
-	{{ nextForm.submit2() }}
 	<a href="{{ url_for('nav_image',command='prev', number=number, label='None') }}", id="button_prev"><input type="button" value="Previous"></a>
+	{{ nextForm.submit2() }}
+	
 	
 </form>
 </div>

@@ -3,6 +3,7 @@ import psycopg2
 import urllib.request
 from PIL import Image
 import numpy as np
+import cv2
 from flask import Flask, flash, request, redirect, url_for, render_template, send_file
 from werkzeug.utils import secure_filename
 from app.image_render import image_render
@@ -153,7 +154,6 @@ def bands(number):
         date = info[2]
         file = info[3]
         url = azure_upload.get_img_url_with_blob_sas_token(name)
-    
     return render_template('index.html', title=str_band, form=form,name=name, nextForm= nextForm, number=number, utm=utm, year=year, date=date, file=file, url=url, current_label=current_label )
     
 
@@ -182,8 +182,9 @@ def nav_image(command, number,label):
             flash("This is the first image in the list")
             return redirect(url_for('bands', number=number), code=302)
         return redirect(url_for('bands', number=number-1), code=302)
-        
-        
+       
+
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)
     

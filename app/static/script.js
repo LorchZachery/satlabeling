@@ -19,43 +19,43 @@ document.onkeyup = function(e) {
 	  document.getElementById('band_num').value=13;
   }
   //set band to 0 with 0
-  else if (key == 48) {
+  else if (key == 48 && e.altKey) {
 	document.getElementById('band_num').value=0;
   } 
   //set band to 1 with 1 
-  else if(key ==49){
+  else if(key ==49 && e.altKey){
 	  document.getElementById('band_num').value=1;
   } 
   //set band to 2 with 2
-  else if(key ==50){
+  else if(key ==50 && e.altKey){
 	  document.getElementById('band_num').value=2;
   } 
   //set  band to 3 with 3
-  else if(key ==51){
+  else if(key ==51 && e.altKey){
 	  document.getElementById('band_num').value=3;
   }
   //set band to 4 with 4
-  else if(key ==52){
+  else if(key ==52 && e.altKey){
 	  document.getElementById('band_num').value=4;
   }
   //set band to 5 with 5
-  else if(key ==53){
+  else if(key ==53 && e.altKey){
 	  document.getElementById('band_num').value=5;
   }
   //set band to 6 with 6
-  else if(key ==54){
+  else if(key ==54 && e.altKey){
 	  document.getElementById('band_num').value=6;
   }
   //set band to 7 with 7
-  else if(key ==55){
+  else if(key ==55 && e.altKey){
 	  document.getElementById('band_num').value=7;
   }
   //ste band to 8 with 8
-  else if(key ==56){
+  else if(key ==56 && e.altKey){
 	  document.getElementById('band_num').value=8;
   }
   //set band to 9 with 9
-  else if(key ==57){
+  else if(key ==57 && e.altKey){
 	  document.getElementById('band_num').value=9;
   }
   

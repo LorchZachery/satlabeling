@@ -45,7 +45,7 @@ def floodfill(x, y):
         floodfill(x, y - 1) # up
         
 def mask():
-
+    print(image)
     Wmask =(image[:, :, 0:3] == [255, 255, 255]).all(2)
     cv2.imwrite('result.png', (Wmask*255).astype(np.uint8))
 
@@ -55,7 +55,7 @@ while(1):
 
     #show image on screen as drawing/filling
     cv2.imshow('img',image)
-    mask()
+    
     
     #image = cv2.imread("result.png")
     #cv2.imshow('masked image', image)
@@ -63,6 +63,7 @@ while(1):
     #floodfill(0, 0)
 
     if cv2.waitKey(1) & 0xFF == 27:
+        mask()
         break
         
 
