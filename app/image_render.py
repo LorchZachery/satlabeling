@@ -173,7 +173,7 @@ class image_render:
     def band(self, band_num):
         if band_num is None:
             return False
-        if (band_num < self.data.shape[0]) and (band_num > 0):
+        if (band_num < self.data.shape[0]):
             self.img = self.contrast_enhance_band(self.data[band_num,:,:], percentile=(0.5,99.5),gamma=0.7)
             return self.img
         else: 

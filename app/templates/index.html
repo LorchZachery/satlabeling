@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
 <p>
 	
 	{% with messages = get_flashed_messages() %}
@@ -15,59 +15,63 @@
 </p>
 
 	
-		<div class="container_left">
-		{% if url %}
-			<img src="{{ url }}", height="600", width="600">
-		{% endif %}
-		</div>
+<div class="container_left">
+	{% if url %}
+		<img src="{{ url }}", height="600", width="600">
+	{% endif %}
+</div>
 <div class="container_right">
-{% if number or number == 0 %}
-		<div>
-			<ul>
-				<li>UTM: {{ utm }}</li>
-				<li>Year: {{ year }}</li>
-				<li>Date: {{ date }}</li>
-				<li>File: {{ file }}</li>
-				{% if current_label %}
-				<li>Label: {{ current_label }}</li>
-				{% endif %}
-			</ul>
+			<div>
+				<ul>
+					<li>UTM: {{ utm }}</li>
+					<li>Year: {{ year }}</li>
+					<li>Date: {{ date }}</li>
+					<li>File: {{ file }}</li>
+					
+					<li>Current Band: {{ bandName }}</li>
+					
+					<li id="currentlabel" style="visibility: hidden;">{{ current_label }}</li>
+				</ul>
+			</div>
+	<div style="width: 100%;", >
+		<div class="dropdown" style="width: 50px; float: left;">
+			<button class="dropbtn">Select Band</button>
+			<div class="dropdown-content", onclick="this.style.visibility='hidden';">
+				<a href="{{ url_for('bands',number=number,band=321) }}"><u>R</u>GB</a>
+				<a href="{{ url_for('bands',number=number,band=0) }}">Aerosol</a>
+				<a href="{{ url_for('bands',number=number,band=1) }}">Blue</a>
+				<a href="{{ url_for('bands',number=number,band=2) }}">Green</a>
+				<a href="{{ url_for('bands',number=number,band=3) }}">Red</a>
+				<a href="{{ url_for('bands',number=number,band=4) }}">Vegetation -5</a>
+				<a href="{{ url_for('bands',number=number,band=5) }}">Vegetation - 6</a>
+				<a href="{{ url_for('bands',number=number,band=6) }}">Vegetation -7</a>
+				<a href="{{ url_for('bands',number=number,band=7) }}">NIR</a>
+				<a href="{{ url_for('bands',number=number,band=8) }}">Narrow NIR</a>
+				<a href="{{ url_for('bands',number=number,band=9) }}">Water Vapour</a>
+				<a href="{{ url_for('bands',number=number,band=10) }}">SWIR - Cirrus</a>
+				<a href="{{ url_for('bands',number=number,band=11) }}">SWIR - 11</a>
+				<a href="{{ url_for('bands',number=number,band=12) }}">SWIR - 12</a>
+			</div>
 		</div>
-	
-{% endif %}
-
-
-<form action="" method="post" novalidate id="bandForm">
-	{{ form.hidden_tag() }}
-	
-	<p>
-		<label for="band_num">Band Number</label> <br>
-		<input type="number", id="band_num", name="band_num", min="0">
-	</p>
-	<p>
-		<label for ="rgb">RGB</label><input type="checkbox", id="rgb", name="rgb">
-	</p>
-	
-	
-	<p>{{ form.submit1() }}</p>
-	
-	
-</form>
-<form method="post" id="tagForm">
-	{{ nextForm.hidden_tag() }}
-	<p>
-		<input type="radio", id="clouds", name="label", value="clouds">
-		<label for="clouds">Clouds</label><br>
-		<input type="radio", id="semi-clouds", name="label", value="semi-clouds">
-		<label for="semi-clouds">Semi-Clouds</label><br>
-		<input type="radio", id="no-clouds", name="label", value="no-clouds">
-		<label for="no-clouds">No Clouds</label><br>
-	</p>
-	<a href="{{ url_for('nav_image',command='prev', number=number, label='None') }}", id="button_prev"><input type="button" value="Previous"></a>
-	{{ nextForm.submit2() }}
-	
-	
-</form>
+		<div style="margin-left: 70px;" >	
+			<form method="post" id="tagForm">
+				{{ nextForm.hidden_tag() }}
+				{{ prevForm.hidden_tag() }}
+				<p>
+					<input type="radio", id="clouds", name="label", value="clouds">
+					<label for="clouds"><u>C</u>louds</label><br>
+					<input type="radio", id="semi-clouds", name="label", value="semi-clouds">
+					<label for="semi-clouds"><u>S</u>emi-Clouds</label><br>
+					<input type="radio", id="no-clouds", name="label", value="no-clouds">
+					<label for="no-clouds">N<u>o</u> Clouds</label><br>
+				</p>
+				{{ prevForm.submit3() }}
+				{{ nextForm.submit2(onclick="this.style.visibility='hidden';") }}
+				
+				
+			</form>
+		</div>
+	</div>
 </div>
 <script src=" {{ url_for('static', filename='script.js') }}"></script>
 
