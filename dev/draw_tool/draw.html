@@ -3,22 +3,25 @@
 
    
    <body onload="init()">
-       <canvas id="can" width="600" height="600" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas> //canvas pen draws on
        
-       <div style="position:absolute;top:20%;left:43%;">Eraser</div>
-       <div style="position:absolute;top:20%;left:46%;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div> //erase square
+       <canvas id="can" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
        
-       
-       
-       
-       <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:25%;left:43%;"> //clear button
+       <!-- doesn't do anything yet. should switch back to pen after eraser is used -->
+       <div style="position:absolute;top:10%;left:58;">Pen</div>
+       <div style="position:absolute;top:10%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
 
-       <div style="position:absolute;top:15%;left:43%;">Mask</div>
-       <div style="position:absolute;top:15%;left:46%;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="mask()"></div>
+       <!-- doesn't do anything yet. should switch to eraser that works when finished -->
+       <div style="position:absolute;top:15%;left:58;">Eraser</div>
+       <div style="position:absolute;top:15%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
        
+       <!-- doesn't do anything yet. should switch to eraser that works when finished -->
+       <div style="position:absolute;top:20%;left:58;">Mask</div>
+       <div style="position:absolute;top:20%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="mask()"></div>
        
+       <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:25%;left:65;">
+
    </body>
-   <input type="button" id="save" value="Save to PNG">
+
    <style>
        canvas{
            background-image: url("image.jpeg");
@@ -26,6 +29,7 @@
            background-size: 100% 100%;
        }
    </style>
+   
    
    
    <script type="text/javascript">
@@ -38,23 +42,20 @@
 
     var x = "opaque",
         y = 5;
+        
     
     function init() {
         canvas = document.getElementById('can');
         ctx = canvas.getContext("2d");
-        w = canvas.width;
-        h = canvas.height;
         
+        //loads image to make canvas same size as image to be marked
         imageObj = new Image();
         imageObj.src="image.jpeg";
         canvas.width =imageObj.width;
         canvas.height =imageObj.height;
-        ctx.drawImage(imageObj, 0,0);
         
-        ctx.strokeStyle = 'rgba(255, 255, 255, .3)';
-        ctx.fillStyle = 'rgba(255, 255, 255, .3)';
-        
-        
+    
+        //tracks mouse movement
         canvas.addEventListener("mousemove", function (e) {
             findxy('move', e)
         }, false);
@@ -69,7 +70,10 @@
         }, false);
     }
     
-    function color(obj) {
+    
+    /*
+     //used to make white eraser ... need to change erase function
+     function color(obj) {
         switch (obj.id) {
             case "green":
                 x = "green";
@@ -95,15 +99,16 @@
         }
         if (x == "white") y = 14;
         else y = 30;
-    
     }
-    
+    */
+   
+    //draws on canvas
     function draw() {
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
         ctx.lineTo(currX, currY);
-        ctx.strokeStyle = x;
-        ctx.lineWidth = y;
+        ctx.strokeStyle = 'rgba(255, 255, 255, .3)';
+        ctx.lineWidth = 5;
         ctx.stroke();
         ctx.closePath();
     }
@@ -111,8 +116,7 @@
     function erase() {
         var m = confirm("Want to clear");
         if (m) {
-            ctx.clearRect(0, 0, w, h);
-            document.getElementById("canvasimg").style.display = "none";
+            ctx.clearRect(0, 0, imageObj.width, imageObj.height);
         }
     }
     
@@ -149,11 +153,15 @@
     }
     function mask() {
         
-        var img = canvas.toDataURL();
-        alert("hit1");
+        img = canvas.toDataURL();
         document.getElementById('can').src = img;
-        alert("hit2");
-        alert(document.getElementById('can').src);
+        alert("time to figure out how to make a mask");
+        
+        //how to make mask in python opencv
+        //Wmask =(img[:, :, 0:3] == [255, 255, 255]).all(2);
+        //cv.imwrite('result.png', (Wmask*255).astype(np.uint8));
+        
+        //alert(document.getElementById('can').src);
     }
     </script>
    
