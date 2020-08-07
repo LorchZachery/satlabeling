@@ -18,9 +18,49 @@
        <div style="position:absolute;top:20%;left:58;">Mask</div>
        <div style="position:absolute;top:20%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="mask()"></div>
        
+       <label>file name</label><input id="fname" type="text"><button id="save" onclick="mask()">Mask</button>
+       
        <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:25%;left:65;">
 
    </body>
+   <table>
+   <tr>
+       <td><button style="height: 20px; width: 80px;" onclick="fill()">Fill</button>
+       <td><button style="background-color: #000000; height: 20px; width: 20px;" onclick="color('#000000')"></button>
+       <td><button style="background-color: #B0171F; height: 20px; width: 20px;" onclick="color('#B0171F')"></button>
+       <td><button style="background-color: #DA70D6; height: 20px; width: 20px;" onclick="color('#DA70D6')"></button>
+       <td><button style="background-color: #8A2BE2; height: 20px; width: 20px;" onclick="color('#8A2BE2')"></button>
+       <td><button style="background-color: #0000FF; height: 20px; width: 20px;" onclick="color('#0000FF')"></button>
+       <td><button style="background-color: #4876FF; height: 20px; width: 20px;" onclick="color('#4876FF')"></button>
+       <td><button style="background-color: #CAE1FF; height: 20px; width: 20px;" onclick="color('#CAE1FF')"></button>
+       <td><button style="background-color: #6E7B8B; height: 20px; width: 20px;" onclick="color('#6E7B8B')"></button>
+       <td><button style="background-color: #00C78C; height: 20px; width: 20px;" onclick="color('#00C78C')"></button>
+       <td><button style="background-color: #00FA9A; height: 20px; width: 20px;" onclick="color('#00FA9A')"></button>
+       <td><button style="background-color: #00FF7F; height: 20px; width: 20px;" onclick="color('#00FF7F')"></button>
+       <td><button style="background-color: #00C957; height: 20px; width: 20px;" onclick="color('#00C957')"></button>
+       <td><button style="background-color: #3D9140; height: 20px; width: 20px;" onclick="color('#3D9140')"></button>
+       <td><button style="background-color: #32CD32; height: 20px; width: 20px;" onclick="color('#32CD32')"></button>
+       <td><button style="background-color: #00EE00; height: 20px; width: 20px;" onclick="color('#00EE00')"></button>
+       <td><button style="background-color: #008B00; height: 20px; width: 20px;" onclick="color('#008B00')"></button>
+       <td><button style="background-color: #76EE00; height: 20px; width: 20px;" onclick="color('#76EE00')"></button>
+       <td><button style="background-color: #CAFF70; height: 20px; width: 20px;" onclick="color('#CAFF70')"></button>
+       <td><button style="background-color: #FFFF00; height: 20px; width: 20px;" onclick="color('#FFFF00')"></button>
+       <td><button style="background-color: #CDCD00; height: 20px; width: 20px;" onclick="color('#CDCD00')"></button>
+       <td><button style="background-color: #FFF68F; height: 20px; width: 20px;" onclick="color('#FFF68F')"></button>
+       <td><button style="background-color: #FFFACD; height: 20px; width: 20px;" onclick="color('#FFFACD')"></button>
+       <td><button style="background-color: #FFEC8B; height: 20px; width: 20px;" onclick="color('#FFEC8B')"></button>
+       <td><button style="background-color: #FFD700; height: 20px; width: 20px;" onclick="color('#FFD700')"></button>
+       <td><button style="background-color: #F5DEB3; height: 20px; width: 20px;" onclick="color('#F5DEB3')"></button>
+       <td><button style="background-color: #FFE4B5; height: 20px; width: 20px;" onclick="color('#FFE4B5')"></button>
+       <td><button style="background-color: #EECFA1; height: 20px; width: 20px;" onclick="color('#EECFA1')"></button>
+       <td><button style="background-color: #FF9912; height: 20px; width: 20px;" onclick="color('#FF9912')"></button>
+       <td><button style="background-color: #8E388E; height: 20px; width: 20px;" onclick="color('#8E388E')"></button>
+       <td><button style="background-color: #7171C6; height: 20px; width: 20px;" onclick="color('#7171C6')"></button>
+       <td><button style="background-color: #7D9EC0; height: 20px; width: 20px;" onclick="color('#7D9EC0')"></button>
+       <td><button style="background-color: #388E8E; height: 20px; width: 20px;" onclick="color('#388E8E')"></button>
+       
+   </tr>
+   </table>
 
    <style>
        canvas{
@@ -42,11 +82,14 @@
 
     var x = "opaque",
         y = 5;
+    var fill_value = true;
+    
         
     
     function init() {
         canvas = document.getElementById('can');
         ctx = canvas.getContext("2d");
+        
         
         //loads image to make canvas same size as image to be marked
         imageObj = new Image();
@@ -102,15 +145,32 @@
     }
     */
    
+    function fill(){
+      fill_value = true;
+      
+    }
+   
+    function color(color_value){
+      ctx.strokeStyle = color_value;
+      ctx.fillStyle = color_value;
+    }
+   
     //draws on canvas
     function draw() {
+        ctx.strokeStyle = 'rgba(255, 255, 255, .3)';
+        ctx.lineWidth = 5;
+        
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
         ctx.lineTo(currX, currY);
-        ctx.strokeStyle = 'rgba(255, 255, 255, .3)';
-        ctx.lineWidth = 5;
         ctx.stroke();
-        ctx.closePath();
+        if(fill_value){
+            ctx.fill();
+            fill_value = false;
+        }
+        
+        
+        //ctx.closePath();
     }
     
     function erase() {
@@ -151,18 +211,44 @@
         }
         
     }
+   /*
     function mask() {
         
-        img = canvas.toDataURL();
+        var img = canvas.toDataURL();
+        
+        alert(img);
+        
+        var base_url = window.location.origin;
+        alert(base_url);
+        var slash = "/";
+        var redirect = base_url.concat(slash,img);
+        window.location.href = redirect;
+        
         document.getElementById('can').src = img;
         alert("time to figure out how to make a mask");
+        
         
         //how to make mask in python opencv
         //Wmask =(img[:, :, 0:3] == [255, 255, 255]).all(2);
         //cv.imwrite('result.png', (Wmask*255).astype(np.uint8));
         
-        //alert(document.getElementById('can').src);
+   
     }
+   */
+    function mask(){
+        var filename = document.getElementById("fname").value;
+        alert("hit1")
+        
+        var image = canvas.toDataURL();
+        alert("hit3")
+        jQuery(function($) {
+             $.post("/", { save_fname: filename, save_cdata: data, save_image: image });
+        });
+       
+        alert(filename + " saved");
+    }
+   
+    
     </script>
    
    </html>
