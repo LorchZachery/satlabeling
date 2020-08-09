@@ -88,17 +88,20 @@ class Azure_Upload:
         self.account_name = "satlabelingdata"
         self.account_key = os.getenv('AZURE_SATLABELING_ACCOUNT_KEY')
         
-    def upload_file(self,path,name):
+    def upload_file(self,path,name, override=False):
         self.blob_client = self.blob_service_client.get_blob_client(container=self.container_name, blob=name)
         #print(self.blob_client.get_blob_properties())
-        if not self.exists(name):
-            print("\nUploading Blob")
-            
-            with open(path, "rb") as data:
-                self.blob_client.upload_blob(data)
+        if not override:
+            if not self.exists(name):
+                print("\nUploading Blob")
+                
+                with open(path, "rb") as data:
+                    self.blob_client.upload_blob(data)
+            else:
+                print("file already created")
         else:
-            print("file already created")
-    
+            with open(path, "rb") as data:
+                    self.blob_client.upload_blob(data, overwrite=True)
     
     def exists(self,name) ->bool:
         # if the blob exists this will return true

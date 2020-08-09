@@ -4,7 +4,7 @@ import urllib.request
 from PIL import Image
 import numpy as np
 
-from flask import Flask, flash, request, redirect, url_for, render_template, send_file
+from flask import Flask, flash, request, redirect, url_for, render_template, send_file, jsonify
 from werkzeug.utils import secure_filename
 from app.image_render import image_render
 from app import app
@@ -18,6 +18,7 @@ azure.get_file_info()
 Paths = azure.get_paths()
 Files = azure.get_files()
 azure_upload = Azure_Upload("imagebands/uploads")
+azure_upload_masks = Azure_Upload("imagebands/masks")
 database = Database()
 """
 Displays home index page, just to get it started
@@ -205,7 +206,36 @@ def nav_image(command, number,label):
             database.add_data(id, 1, label)
         return redirect(url_for('bands', number=number-1, band=321), code=302)
        
-
+@app.route('/get_post_json', methods=['POST'])
+def get_post_json():    
+    data = request.form['canvas_data']
+    print(data)
+    number = request.form['number']
+    print(number)
+    number = int(number)
+    name = Files[number].split('/')[3].split('.')[0] + '_mask.png'
+    
+    
+    response = urllib.request.urlopen(data)
+    with open(name, 'wb') as f:
+        f.write(response.file.read())
+        
+    im = Image.open(name)
+    
+    ni = np.array(im)
+    
+    color = ni[:,:,2] > 1
+    
+    Image.fromarray((color*255).astype(np.uint8)).save(name)
+    
+    
+    #uploading mask to azure
+    azure_upload_masks.upload_file(name,name,override =True)
+    os.remove(name)
+    
+    
+    
+    return jsonify(status="success", data=data)
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)

@@ -17,26 +17,16 @@
 	
 <div class="container_left">
 	{% if url %}
-		<div style="top:3;left:3;position:absolute;">
-			<canvas id="can",style="border:2px solid;"></canvas>
-		</div>
+		
 		<div style="top:3;left:3;position:absolute;">
 			<img src="{{ url }}", id="sat_image" onload="setsize()">
 		</div>
-		 <!-- doesn't do anything yet. should switch back to pen after eraser is used -->
-		<div style="position:absolute;top:10%;left:58;">Pen</div>
-		<div style="position:absolute;top:10%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
-	
-		<!-- doesn't do anything yet. should switch to eraser that works when finished -->
-		<div style="position:absolute;top:15%;left:58;">Eraser</div>
-		<div style="position:absolute;top:15%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
-		
-		<!-- doesn't do anything yet. should switch to eraser that works when finished -->
-		<div style="position:absolute;top:20%;left:58;">Mask</div>
-		<div style="position:absolute;top:20%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="mask()"></div>
+		<div style="top:3;left:3;position:absolute;">
+			<canvas id="can",style="border:2px solid;"></canvas>
+		</div>
        
        
-       <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:25%;left:65;">
+       
 	{% endif %}
 	
 </div>
@@ -92,7 +82,28 @@
 			</form>
 		</div>
 	</div>
+		<!-- doesn't do anything yet. should switch back to pen after eraser is used -->
+		
+		<input type="radio", name="tool", id="pen", onclick="color(this)" checked>
+		<label for="pen">Pen<label><br>
+		
+		<!-- doesn't do anything yet. should switch to eraser that works when finished -->
+		
+		<input type="radio", name="tool" id="eraser", onclick="color(this)">
+		<label for="eraser">Eraser</label><br>
+		
+		<!-- doesn't do anything yet. should switch to eraser that works when finished -->
+		<input type="button" value="clear" id="clr" size="23" onclick="erase()">
+		
+		<button onclick="mask()">Create Mask</button>
+		
+		
 </div>
+<script type="text/javascript">
+	window.appConfig = {
+		number: "{{ number }}"
+	};
+</script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src=" {{ url_for('static', filename='script.js') }}"></script>
