@@ -98,8 +98,9 @@ document.onkeyup = function(e) {
 	  window.location.href = redirect;
   }
   
-  //go to next image with shift + n
+  //go to next image with  n
   else if(key==78){
+	document.getElementById("submit2").style.visibility= "hidden";
 	var command = 'next';
 	var labels = document.getElementsByName('label');
 	var label = "None";
@@ -171,4 +172,12 @@ function labels(){
 	}
 }
 
+function setsize(){
+	var width = document.getElementById("sat_image").width;
+	var height = document.getElementById("sat_image").height;
+	
+	document.getElementById("can").width = width;
+	document.getElementById("can").height = height;
+	
+}
 
