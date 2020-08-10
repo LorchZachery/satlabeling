@@ -255,7 +255,7 @@ function draw() {
 function erase() {
     var m = confirm("Want to clear");
     if (m) {
-        ctx.clearRect(0, 0, imageObj.width, imageObj.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 }
 
@@ -291,8 +291,23 @@ function findxy(res, e) {
     
 };
 
+function erasePen() {
+        
+        ctx.lineWidth = 50;
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.strokeStyle = "rgba(0, 0, 0, 1.0)";
+}
+
+function pen() {
+               
+        ctx.lineWidth = 5;
+        ctx.globalCompositeOperation = "source-over";
+        ctx.strokeStyle = 'rgba(255, 255, 255, .5)';
+}
+
 
 function mask(){
+	alert("Mask created");
 	var dataURL = canvas.toDataURL( "image/png" );
     $.post( "/get_post_json", {
        canvas_data: dataURL,

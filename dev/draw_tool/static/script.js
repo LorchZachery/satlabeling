@@ -52,10 +52,10 @@ var canvas, ctx, flag = false,
         
     }
     
-    function erase() {
+    function clear() {
         var m = confirm("Want to clear");
         if (m) {
-            ctx.clearRect(0, 0, imageObj.width, imageObj.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
     }
     

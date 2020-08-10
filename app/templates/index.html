@@ -16,6 +16,7 @@
 
 	
 <div class="container_left">
+	<div class="left">
 	{% if url %}
 		
 		<div style="top:3;left:3;position:absolute;">
@@ -24,10 +25,25 @@
 		<div style="top:3;left:3;position:absolute;">
 			<canvas id="can",style="border:2px solid;"></canvas>
 		</div>
+    </div>
        
-       
-       
+    <div class="right">
 	{% endif %}
+	<!-- doesn't do anything yet. should switch back to pen after eraser is used -->
+		
+	<input type="radio", name="tool", id="pen", onclick="pen()" checked>
+	<label for="pen">Pen<label><br>
+	
+	<!-- doesn't do anything yet. should switch to eraser that works when finished -->
+	
+	<input type="radio", name="tool" id="eraser", onclick="erasePen()">
+	<label for="eraser">Eraser</label><br>
+	
+	<!-- doesn't do anything yet. should switch to eraser that works when finished -->
+	<input type="button" value="clear" id="clr" size="23" onclick="erase()">
+	
+	<button onclick="mask()">Create Mask</button> 
+	</div>
 	
 </div>
 <div class="container_right">
@@ -82,20 +98,7 @@
 			</form>
 		</div>
 	</div>
-		<!-- doesn't do anything yet. should switch back to pen after eraser is used -->
 		
-		<input type="radio", name="tool", id="pen", onclick="color(this)" checked>
-		<label for="pen">Pen<label><br>
-		
-		<!-- doesn't do anything yet. should switch to eraser that works when finished -->
-		
-		<input type="radio", name="tool" id="eraser", onclick="color(this)">
-		<label for="eraser">Eraser</label><br>
-		
-		<!-- doesn't do anything yet. should switch to eraser that works when finished -->
-		<input type="button" value="clear" id="clr" size="23" onclick="erase()">
-		
-		<button onclick="mask()">Create Mask</button>
 		
 		
 </div>
