@@ -1,37 +1,35 @@
 
 <html>
 
-   
-   <body onload="init()">
-       
-       <canvas id="can" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
-       
-       <!-- doesn't do anything yet. should switch back to pen after eraser is used -->
-       <div style="position:absolute;top:10%;left:58;">Pen</div>
-       <div style="position:absolute;top:10%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
 
-       <!-- doesn't do anything yet. should switch to eraser that works when finished -->
-       <div style="position:absolute;top:15%;left:58;">Eraser</div>
-       <div style="position:absolute;top:15%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
-       
-       <!-- doesn't do anything yet. should switch to eraser that works when finished -->
-       <div style="position:absolute;top:20%;left:58;">Mask</div>
-       <div style="position:absolute;top:20%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="mask()"></div>
-       
-       
-       <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:25%;left:65;">
+<body onload="init()">
+    
+    <canvas id="can" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
+    
+    <!-- doesn't do anything yet. should switch back to pen after eraser is used -->
+    <div style="position:absolute;top:10%;left:58;">Pen</div>
+    <div style="position:absolute;top:10%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="pen()"></div>
 
-   </body>
-  
+    <!-- doesn't do anything yet. should switch to eraser that works when finished -->
+    <div style="position:absolute;top:15%;left:58;">Eraser</div>
+    <div style="position:absolute;top:15%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="erasePen()"></div>
+    
+    <!-- doesn't do anything yet. should switch to eraser that works when finished -->
+    <div style="position:absolute;top:20%;left:58;">Mask</div>
+    <div style="position:absolute;top:20%;left:105;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="mask()"></div>
+    
+    <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:25%;left:65;">
 
-   <style>
-       canvas{
-           background-image: url("{{ url_for('static', filename='image.jpeg') }}");
-           background-position: center;
-           background-size: 100% 100%;
-       }
-   </style>
-   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-   <script type="text/javascript", src="{{ url_for('static',filename='script.js') }}"></script>
-   </html>
+</body>
+
+<style>
+    canvas{
+        background-image: url("{{ url_for('static', filename='image.jpeg') }}");
+        background-position: center;
+        background-size: 100% 100%;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript", src="{{ url_for('static',filename='script.js') }}"></script>
+</html>
