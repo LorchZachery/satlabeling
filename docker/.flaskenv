@@ -1,0 +1,2 @@
+FLASK_APP=satlabeling.py
+FLASK_ENV=devlopment
