@@ -16,3 +16,6 @@ creating a tool to label satillite images similar to labelme yet focused on more
 ## docker
 to create the docker container, it is suggested to move the docker files into another folder in order to   
 not build the container with legacy and dev. 
+## Authors
+Zachery J Lorch, USAFA  
+Alexis Shirley, USAFA  

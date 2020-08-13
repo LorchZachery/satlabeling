@@ -1,3 +1,4 @@
+# Author: Zachery J Lorch, USAFA
 import os
 import psycopg2
 import urllib.request
@@ -206,20 +207,27 @@ def nav_image(command, number,label):
             database.add_data(id, 1, label)
         return redirect(url_for('bands', number=number-1, band=321), code=302)
        
+"""
+Function to get the dataURL from java script to create the mask and save
+it to the azure cloud
+"""
+
 @app.route('/get_post_json', methods=['POST'])
 def get_post_json():    
+    # getting info from ajax
     data = request.form['canvas_data']
-    print(data)
     number = request.form['number']
-    print(number)
+    
+    # setting the name of the image
     number = int(number)
     name = Files[number].split('/')[3].split('.')[0] + '_mask.png'
     
-    
+    # saving first image, this is transulant 
     response = urllib.request.urlopen(data)
     with open(name, 'wb') as f:
         f.write(response.file.read())
-        
+    
+    # creating mask that is not transulsant
     im = Image.open(name)
     
     ni = np.array(im)

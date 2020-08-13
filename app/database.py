@@ -1,3 +1,4 @@
+# Author: Zachery J Lorch, USAFA
 from azure.cosmos import exceptions, CosmosClient, PartitionKey
 import azure.cosmos.partition_key as partition_key
 import os

@@ -1,3 +1,4 @@
+# Author: Zachery J Lorch, USAFA
 import os
 from datetime import datetime, timedelta
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient

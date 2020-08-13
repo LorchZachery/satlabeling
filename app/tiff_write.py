@@ -1,3 +1,4 @@
+# Author: Zachery J Lorch, USAFA
 import os
 from osgeo import gdal
 from osgeo import gdalconst
